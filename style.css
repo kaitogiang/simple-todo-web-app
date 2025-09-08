@@ -28,7 +28,7 @@
 
 .container {
   background-color: var(--bg-primary);
-  width: 26%;
+  width: 30%;
   margin: auto;
   padding: 10px 20px;
   display: flex;
@@ -111,6 +111,7 @@
   display: flex;
   align-items: stretch;
   border: 1px solid var(--success-color);
+  background-color: var(--text-color);
   border-radius: 8px;
   width: fit-content;
   padding: 5px 8px;
@@ -178,4 +179,26 @@
 @keyframes alertBackToTop {
   from {top: 10px;}
   to {top: -100%;}
+}
+
+@media screen and (max-width: 1000px) {
+  .container {
+    width: 50%;
+  }
+
+  .todo-input {
+    width: 200px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .container {
+    width: 80%;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .container {
+    width: 100%;
+  }
 }
