@@ -28,7 +28,7 @@ function addTodoItem(event) {
     const editBtn = document.createElement("button");
     //Omit empty value
     if (value == "") {
-        showAlert();
+        showAlert(false);
         return;
     };
     //set the properties
@@ -39,6 +39,7 @@ function addTodoItem(event) {
     editBtn.innerHTML = "Edit";
     //Setup action listener
     deleteBtn.addEventListener("click", deleteTodoItem);
+    editBtn.addEventListener("click", editTask);
     //Append action btn child
     span.innerHTML = value;
     subDiv.appendChild(deleteBtn);
@@ -80,9 +81,73 @@ function updateTodoCount(isAdded = false) {
 function markCompleteTodo() {
     console.log("Mark complete");
     const innerTodoTextElement = this.firstElementChild;
+    if (innerTodoTextElement.tagName === 'INPUT') {
+        return;
+    }
     innerTodoTextElement.className = "task-list-item--done";
     updateTodoCount();
 }
+/**
+ * @this {HTMLElement}
+ */
+function editTask() {
+    const todoListItem = this.parentElement.parentElement;
+    const originalTodoName = todoListItem.firstElementChild
+    const cloneToDoListItem = todoListItem.cloneNode(true);
+    //Replace with the edit input field
+    todoListItem.innerHTML = createEditTexField(originalTodoName.textContent);
+    const btnList = todoListItem.lastElementChild.children;
+    const okBtn = btnList[0];
+    const cancelBtn = btnList[1];
+    const inputField = todoListItem.querySelector("#edit-input");
+    
+    inputField.addEventListener("keydown", (event)=>{
+        if (event.key !== 'Enter') {
+            return;
+        }
+        updateTodoItem(todoListItem, cloneToDoListItem, inputField.value);
+    });
+
+    cancelBtn.addEventListener("click", ()=>{
+        todoListItem.innerHTML = cloneToDoListItem.innerHTML;
+    });
+    okBtn.addEventListener("click", ()=> {
+        updateTodoItem(todoListItem, cloneToDoListItem, inputField.value);
+    });
+    console.log(`last child is: ${btnList}`);
+}
+/**
+ * 
+ * @param {HTMLElement} todoListItem 
+ * @param {HTMLElement} cloneToDoListItem 
+ * @param {*} value
+ */
+function updateTodoItem(todoListItem, cloneToDoListItem, value) {
+    todoListItem.innerHTML = cloneToDoListItem.innerHTML;
+    const updatedTodoListItem = todoListItem.querySelector("#todo-item");
+    console.log(`Todo : ${updatedTodoListItem}`);
+    //Re-attach the listener
+    const deleteBtn = todoListItem.querySelector("button:nth-child(1)");
+    const editBtn = todoListItem.querySelector("button:nth-child(2)");
+    deleteBtn.addEventListener("click", deleteTodoItem);
+    editBtn.addEventListener("click", editTask);
+    updatedTodoListItem.innerHTML = value;
+}
+/**
+ * 
+ * @param {String} value 
+ * @returns 
+ */
+function createEditTexField(value) {
+    return `
+    <input id="edit-input" class="no-border" type="text" value="${value}">
+    <div class="task-list-item-action">
+        <button>Ok</button>
+        <button>Cancel</button>
+    </div>
+    `;
+}
+
 /**
  * 
  * @param {Boolean} isSuccessAlert 
@@ -100,6 +165,7 @@ function showAlert(isSuccessAlert = true) {
     const newPrefixIcon = cloneIconTemplate.querySelector(isSuccessAlert ? '#success-icon' : '#error-icon');
     const titleElement = alertElement.querySelector('#alert-title');
     const contentElement = alertElement.querySelector('#alert-content');
+    const closeIconElement = alertElement.querySelector('.close-icon').firstElementChild;
     //Set attribute
     if (isSuccessAlert) {
         alertElement.classList.add("alert__success");
@@ -109,6 +175,12 @@ function showAlert(isSuccessAlert = true) {
     titleElement.innerHTML = isSuccessAlert ? SUCCESS_TITLE : ERROR_TITLE;
     contentElement.innerHTML = isSuccessAlert ? SUCCESS_CONTENT : ERROR_CONTENT;
     prefixIconContainer.replaceChild(newPrefixIcon, oldPrefixIcon);
+
+    //Add listener for close icon in the popup
+    closeIconElement.addEventListener("click", ()=> {
+        console.log("Click on Close");
+        alertElement.parentElement.removeChild(alertElement);
+    });
     //Add the alert to the body finally
     document.body.appendChild(alertElement);
     setTimeout(()=> {
