@@ -9,7 +9,17 @@
   --border-color: #B1AEAE;
   --btn-bg-color: #2D60EA;
   --btn-bg-hover-color: #1E409C;
+  --success-color: #68D97B;
+  --error-color: #D86E58;
+  --alert-content: #939393;
 }
+
+@property --alert-primary-color {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #68D97B;;
+}
+
 
 * {
   box-sizing: border-box;
@@ -95,4 +105,47 @@
 
 .row .subtitle:first-child {
   margin-right: 10px;
+}
+
+.alert {
+  display: flex;
+  align-items: stretch;
+  border: 1px solid var(--success-color);
+  border-radius: 8px;
+  width: fit-content;
+  padding: 5px 8px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  outline: 5px solid var(--alert-primary-color);
+}
+
+.prefix-icon {
+  font-size: 20px;
+  color: var(--alert-primary-color);
+  position: relative;
+  padding-right: 5px;
+}
+
+.prefix-icon > i {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+
+.close-icon {
+  color: var(--alert-primary-color);
+  cursor: pointer;
+}
+
+.alert-main p,h4{
+  padding: 5px;
+  margin: 0;
+}
+
+.alert-main p {
+  color: var(--alert-content);
+}
+
+.alert-main h4 {
+  color: var(--alert-primary-color);
 }
