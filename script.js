@@ -75,3 +75,4 @@ function markCompleteTodo() {
     innerTodoTextElement.className = "task-list-item--done";
     updateTodoCount();
 }
+
