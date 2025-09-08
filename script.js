@@ -7,7 +7,6 @@ const uncompletedTodoAmount = document.getElementById("uncompleted-task");
 addBtn.addEventListener("click", addTodoItem);
 todoInput.addEventListener("keydown", addTodoItem);
 
-
 /**
  * @param {Event} event
  */
@@ -39,8 +38,10 @@ function addTodoItem(event) {
     //Append parent child
     div.appendChild(span);
     div.appendChild(subDiv);
+    //Setup listener for div
+    div.addEventListener("dblclick", markCompleteTodo);
     todoList.appendChild(div);
-    updateUncompletedCount(true);
+    updateTodoCount(true);
 }
 
 /**
@@ -50,13 +51,13 @@ function deleteTodoItem() {
     //Access the delete button itself via 'this' keyword
     const todoListItem = this.parentElement.parentElement;
     todoList.removeChild(todoListItem);
-    updateUncompletedCount();
+    updateTodoCount();
 }
 /**
  * 
  * @param {Boolean} isAdded 
  */
-function updateUncompletedCount(isAdded = false) {  
+function updateTodoCount(isAdded = false) {  
     const completedTodoElements = document.getElementsByClassName("task-list-item--done");
     const allTodoElements = todoList.childElementCount;
     completedTodoAmount.innerHTML = completedTodoElements.length;
@@ -64,4 +65,13 @@ function updateUncompletedCount(isAdded = false) {
     if (isAdded) {
         todoInput.value = "";
     }
+}
+/**
+ * @this {HTMLElement}
+ */
+function markCompleteTodo() {
+    console.log("Mark complete");
+    const innerTodoTextElement = this.firstElementChild;
+    innerTodoTextElement.className = "task-list-item--done";
+    updateTodoCount();
 }
