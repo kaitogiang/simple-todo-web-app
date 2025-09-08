@@ -153,7 +153,20 @@
   color: var(--alert-primary-color);
 }
 
+.alert__success {
+  --alert-primary-color: var(--success-color);
+}
+
+.alert__error {
+  --alert-primary-color: var(--error-color)
+}
+
 @keyframes alertFromTop {
   from {top: -100%;}
   to {top: 10px;}
+}
+
+@keyframes alertBackToTop {
+  from {top: 10px;}
+  to {top: -100%;}
 }
